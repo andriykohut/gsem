@@ -56,7 +56,7 @@ def main():
     }
     if args.cmd in list_cmd_map.keys():
         if args.cmd == 'outdated':
-            l = [] #TODO
+            l = ["{} {} -> {}".format(e.meta['uuid'], e.meta['version'], e.remote_meta['version']) for e in manager.outdated()]
         else:
             l = ["{}@{}".format(e.uuid, e.meta['version']) for e in list_cmd_map[args.cmd]()]
         print("{} ({})".format(manager.ext_dir, len(l)))

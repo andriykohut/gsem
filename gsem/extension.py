@@ -56,17 +56,14 @@ class ExtensionManager:
         ).intersection({ex.uuid for ex in self.installed()})
 
     def installed(self):
-        for uuid in os.listdir(self.ext_dir):
-            yield Extension(uuid)
+        return [Extension(uuid) for uuid in os.listdir(self.ext_dir)]
 
     def enabled(self):
-        for uuid in self.enabled_extensions():
-            yield Extension(uuid)
+        return [Extension(uuid) for uuid in self.enabled_extensions()]
 
     def disabled(self):
         # TODO
         pass
 
     def outdated(self):
-        # TODO
-        pass
+        return [e for e in self.enabled() if e.outdated()]
