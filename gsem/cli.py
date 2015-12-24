@@ -14,6 +14,7 @@ def parse_args():
     commands = parser.add_subparsers(dest='cmd')
     commands.add_parser('ls', help='list installed extensions')
     commands.add_parser('enabled', help='list enabled extensions')
+    commands.add_parser('disabled', help='list disabled extensions')
     commands.add_parser('outdated', help='list outdated extensions')
     info = commands.add_parser('info', help='show extension information')
     info.add_argument('uuid', help='extension uuid', metavar='UUID')
@@ -47,7 +48,16 @@ def main():
     """Main cli function."""
     args = parse_args()
     manager = ExtensionManager()
-    if args.cmd == 'ls':
-        installed = ["{}@{}".format(e.uuid, e.meta['version']) for e in manager.installed()]
-        print("{} ({})".format(manager.ext_dir, len(installed)))
-        print_nice_list(installed)
+    list_cmd_map = {
+        'ls': manager.installed,
+        'enabled': manager.enabled,
+        'disabled': manager.disabled,
+        'outdated': manager.outdated,
+    }
+    if args.cmd in list_cmd_map.keys():
+        if args.cmd == 'outdated':
+            l = [] #TODO
+        else:
+            l = ["{}@{}".format(e.uuid, e.meta['version']) for e in list_cmd_map[args.cmd]()]
+        print("{} ({})".format(manager.ext_dir, len(l)))
+        print_nice_list(l)

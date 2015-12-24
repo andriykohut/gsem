@@ -62,3 +62,11 @@ class ExtensionManager:
     def enabled(self):
         for uuid in self.enabled_extensions():
             yield Extension(uuid)
+
+    def disabled(self):
+        # TODO
+        pass
+
+    def outdated(self):
+        # TODO
+        pass
