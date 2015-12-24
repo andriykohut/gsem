@@ -1,10 +1,11 @@
 import argparse
 
 from gsem.config import API_ROOT
+from gsem.extension import Extension
 from gsem.extension import ExtensionManager
 
 
-def parse_args():
+def cli_args():
     """Parse command line arguments.
 
     :returns: argparse.Namespace with parsed args
@@ -27,7 +28,9 @@ def parse_args():
     uninstall = commands.add_parser('uninstall', help='uninstall extension')
     uninstall.add_argument('uuid', help='extension uuid', metavar='UUID')
     commands.add_parser('update', help='update extensions')
-    return parser.parse_args()
+    search = commands.add_parser('search', help='search extensions')
+    search.add_argument('term', help='search term', metavar='TERM')
+    return parser
 
 
 def print_nice_list(l):
@@ -44,9 +47,32 @@ def print_nice_list(l):
             print('└── {}'.format(item))
 
 
+def print_info(ext):
+    """Print extension info.
+
+    :ext: gsem.extension.Extension object
+
+    """
+    print("{} - ({})".format(ext.remote_meta['name'], ext.uuid))
+    print()
+    if ext.installed():
+        if ext.outdated():
+            print('outdated: {} -> {}'.format(ext.meta['version'], ext.remote_meta['version']))
+        else:
+            print('up to date: {}'.format(ext.meta['version']))
+    else:
+        print('not installed: {}'.format(ext.remote_meta['version']))
+    print()
+    print(ext.remote_meta['description'])
+
+
 def main():
     """Main cli function."""
-    args = parse_args()
+    parser = cli_args()
+    args = parser.parse_args()
+    if not args.cmd:
+        parser.print_usage()
+        parser.exit(1)
     manager = ExtensionManager()
     list_cmd_map = {
         'ls': manager.installed,
@@ -61,3 +87,5 @@ def main():
             l = ["{}@{}".format(e.uuid, e.meta['version']) for e in list_cmd_map[args.cmd]()]
         print("{} ({})".format(manager.ext_dir, len(l)))
         print_nice_list(l)
+    elif args.cmd == 'info':
+        print_info(Extension(args.uuid))

@@ -43,6 +43,14 @@ class Extension:
                              .new('org.gnome.shell')
                              .get_value('enabled-extensions'))
 
+    def installed(self):
+        installed = True
+        try:
+            self.meta['uuid']
+        except FileNotFoundError:
+            installed = False
+        return installed
+
 
 class ExtensionManager:
 
