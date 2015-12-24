@@ -11,7 +11,7 @@ def cli_args():
     :returns: argparse.Namespace with parsed args
 
     """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='Gnome-Shell extension manager')
     commands = parser.add_subparsers(dest='cmd')
     commands.add_parser('ls', help='list installed extensions')
     commands.add_parser('enabled', help='list enabled extensions')
