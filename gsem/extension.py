@@ -11,6 +11,7 @@ from gsem.config import (
 
 
 class Extension:
+
     def __init__(self, uuid):
         self.uuid = uuid
         self._meta = None
@@ -20,7 +21,7 @@ class Extension:
     def meta(self):
         """Local metadata dict."""
         if not self._meta:
-            with open(os.path.join(EXTENSION_DIR, self.uuid)) as f:
+            with open(os.path.join(EXTENSION_DIR, self.uuid, 'metadata.json')) as f:
                 self._meta = json.load(f)
         return self._meta
 
@@ -30,7 +31,7 @@ class Extension:
         if not self._remote_meta:
             self._remote_meta = get_json_response(API_DETAIL, {
                 'uuid': self.uuid,
-                'shell_version': GNOME_SHELL_VERSION,
+                'shell_version': '.'.join(str(v) for v in GNOME_SHELL_VERSION),
             })
         return self._remote_meta
 
@@ -46,7 +47,10 @@ class Extension:
 class ExtensionManager:
 
     def enabled_extensions(self):
-        return self.gsettings.get_value('enabled-extensions')
+        return set(
+            Gio.Settings.new('org.gnome.shell')
+            .get_value('enabled-extensions')
+        ).intersection({ex.uuid for ex in self.installed()})
 
     def installed(self):
         for uuid in os.listdir(EXTENSION_DIR):
