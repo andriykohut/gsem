@@ -46,6 +46,9 @@ class Extension:
 
 class ExtensionManager:
 
+    def __init__(self, ext_dir=EXTENSION_DIR):
+        self.ext_dir = ext_dir
+
     def enabled_extensions(self):
         return set(
             Gio.Settings.new('org.gnome.shell')
@@ -53,7 +56,7 @@ class ExtensionManager:
         ).intersection({ex.uuid for ex in self.installed()})
 
     def installed(self):
-        for uuid in os.listdir(EXTENSION_DIR):
+        for uuid in os.listdir(self.ext_dir):
             yield Extension(uuid)
 
     def enabled(self):

@@ -1,6 +1,8 @@
 import argparse
 
 from gsem.config import API_ROOT
+from gsem.extension import ExtensionManager
+
 
 def parse_args():
     """Parse command line arguments.
@@ -9,7 +11,7 @@ def parse_args():
 
     """
     parser = argparse.ArgumentParser()
-    commands = parser.add_subparsers()
+    commands = parser.add_subparsers(dest='cmd')
     commands.add_parser('ls', help='list installed extensions')
     commands.add_parser('enabled', help='list enabled extensions')
     commands.add_parser('outdated', help='list outdated extensions')
@@ -23,10 +25,29 @@ def parse_args():
     reinstall.add_argument('uuid', help='extension uuid', metavar='UUID')
     uninstall = commands.add_parser('uninstall', help='uninstall extension')
     uninstall.add_argument('uuid', help='extension uuid', metavar='UUID')
-    update = commands.add_parser('update', help='update extensions')
+    commands.add_parser('update', help='update extensions')
     return parser.parse_args()
+
+
+def print_nice_list(l):
+    """Nicely print list.
+
+    :l: list to print
+
+    """
+    length = len(l)
+    for index, item in enumerate(l):
+        if index < length-1:
+            print('├── {}'.format(item))
+        else:
+            print('└── {}'.format(item))
 
 
 def main():
     """Main cli function."""
     args = parse_args()
+    manager = ExtensionManager()
+    if args.cmd == 'ls':
+        installed = ["{}@{}".format(e.uuid, e.meta['version']) for e in manager.installed()]
+        print("{} ({})".format(manager.ext_dir, len(installed)))
+        print_nice_list(installed)
