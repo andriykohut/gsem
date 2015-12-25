@@ -77,6 +77,7 @@ def print_info(ext):
 
 
 def main():
+    # TODO: This is ugly!
     """Main cli function."""
     parser = cli_args()
     args = parser.parse_args()
@@ -144,3 +145,16 @@ def main():
         else:
             print("Uninstalling '{}'".format(args.uuid))
             manager.uninstall(args.uuid)
+    elif args.cmd == 'update':
+        outdated = manager.outdated()
+        print('Extension updates avaliable ({})'.format(len(outdated)))
+        if outdated:
+            l = ["{} {} -> {}".format(e.uuid, e.meta['version'], e.remote_meta['version']) for e in outdated]
+            print_nice_list(l)
+            prompt = input('Would you like to install these updates? (yes) ')
+            if prompt.lower().strip().startswith('y'):
+                for e in outdated:
+                    print("Installing {}@{} to {}".format(e.uuid, e.remote_meta['version'], EXTENSION_DIR))
+                    manager.uninstall(e.uuid)
+                    manager.install(e.uuid)
+                reload_gnome_shell()

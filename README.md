@@ -36,7 +36,7 @@ optional arguments:
 * search
 * enable/disable
 * install/uninstall/reinstall
+* update
 
 ## TODO:
-* update
 * pin
