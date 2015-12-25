@@ -32,10 +32,10 @@ optional arguments:
 * list enabled/disabled
 * list outdated
 * extension info
+* search
 
 ## TODO:
 * install/uninstall/reinstall
 * enable/disable
 * update
 * pin
-* search
