@@ -30,6 +30,10 @@ def cli_args():
     commands.add_parser('update', help='update extensions')
     search = commands.add_parser('search', help='search extensions')
     search.add_argument('term', help='search term', metavar='TERM')
+    enable = commands.add_parser('enable', help='enable extension')
+    enable.add_argument('uuid', help='extension uuid', metavar='UUID')
+    disable = commands.add_parser('disable', help='disable extension')
+    disable.add_argument('uuid', help='extensions uuid', metavar='UUID')
     return parser
 
 
@@ -91,8 +95,20 @@ def main():
             print("Search results for '{}' ({})".format(args.term, len(result)))
             l = ['{} - {}'.format(e.remote_meta['uuid'], e.remote_meta['name']) for e in result]
         else:
-            print("{} ({})".format(manager.ext_dir, len(l)))
             l = ["{}@{}".format(e.uuid, e.meta['version']) for e in result]
+            print("{} ({})".format(manager.ext_dir, len(l)))
         print_nice_list(l)
     elif args.cmd == 'info':
         print_info(Extension(args.uuid))
+    elif args.cmd == 'enable':
+        enabled = manager.enable(args.uuid)
+        if enabled:
+            print("'{}' enabled".format(args.uuid))
+        else:
+            print("Can't enable '{}'".format(args.uuid))
+    elif args.cmd == 'disable':
+        disabled = manager.disable(args.uuid)
+        if disabled:
+            print("'{}' disabled".format(args.uuid))
+        else:
+            print("Can't disable '{}".format(args.uuid))

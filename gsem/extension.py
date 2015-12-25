@@ -1,6 +1,7 @@
 import json
 import os
 from gi.repository import Gio
+from gi.repository import GLib
 
 from gsem.utils import get_json_response
 from gsem.config import (
@@ -38,6 +39,7 @@ class Extension:
 
     @remote_meta.setter
     def remote_meta(self, value):
+        self.uuid = value['uuid']
         self._remote_meta = value
 
     def outdated(self):
@@ -68,8 +70,11 @@ class ExtensionManager:
             .get_value('enabled-extensions')
         ).intersection({ex.uuid for ex in self.installed()})
 
+    def __installed_uuids(self):
+        return os.listdir(self.ext_dir)
+
     def installed(self):
-        return [Extension(uuid) for uuid in os.listdir(self.ext_dir)]
+        return [Extension(uuid) for uuid in self.__installed_uuids()]
 
     def enabled(self):
         return [Extension(uuid) for uuid in self.__enabled_uuids()]
@@ -94,3 +99,30 @@ class ExtensionManager:
             ext.remote_meta = remote_meta
             found.append(ext)
         return found
+
+    def enable(self, uuid):
+        if uuid in self.__enabled_uuids():
+            return True
+        ext = Extension(uuid)
+        if not ext.installed():
+            return False
+        enabled_uuids = self.__enabled_uuids()
+        enabled_uuids.add(uuid)
+        Gio.Settings('org.gnome.shell').set_value(
+            'enabled-extensions',
+            GLib.Variant('as', list(enabled_uuids))
+        )
+        return True
+
+    def disable(self, uuid):
+        if uuid not in self.__installed_uuids():
+            raise Extension('Not installed')
+        enabled_uuids = self.__enabled_uuids()
+        if uuid not in enabled_uuids:
+            return True
+        enabled_uuids.remove(uuid)
+        Gio.Settings('org.gnome.shell').set_value(
+            'enabled-extensions',
+            GLib.Variant('as', list(enabled_uuids))
+        )
+        return True
