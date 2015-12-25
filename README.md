@@ -35,8 +35,8 @@ optional arguments:
 * extension info
 * search
 * enable/disable
+* install/uninstall/reinstall
 
 ## TODO:
-* install/uninstall/reinstall
 * update
 * pin
