@@ -7,6 +7,7 @@ from gsem.config import (
     EXTENSION_DIR,
     GNOME_SHELL_VERSION,
     API_DETAIL,
+    API_SEARCH,
 )
 
 
@@ -34,6 +35,10 @@ class Extension:
                 'shell_version': '.'.join(str(v) for v in GNOME_SHELL_VERSION),
             })
         return self._remote_meta
+
+    @remote_meta.setter
+    def remote_meta(self, value):
+        self._remote_meta = value
 
     def outdated(self):
         return self.remote_meta['version'] > self.meta['version']
@@ -76,3 +81,16 @@ class ExtensionManager:
 
     def outdated(self):
         return [e for e in self.enabled() if e.outdated()]
+
+    def search(self, term):
+        query = {
+            'shell_version': '.'.join(str(v) for v in GNOME_SHELL_VERSION),
+            'search': term,
+        }
+        response = get_json_response(API_SEARCH, query)
+        found = []
+        for remote_meta in response['extensions']:
+            ext = Extension(remote_meta['uuid'])
+            ext.remote_meta = remote_meta
+            found.append(ext)
+        return found

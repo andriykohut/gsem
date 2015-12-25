@@ -80,13 +80,19 @@ def main():
         'disabled': manager.disabled,
         'outdated': manager.outdated,
         'disabled': manager.disabled,
+        'search': lambda: manager.search(args.term)
     }
     if args.cmd in list_cmd_map.keys():
+        result = list_cmd_map[args.cmd]()
         if args.cmd == 'outdated':
-            l = ["{} {} -> {}".format(e.meta['uuid'], e.meta['version'], e.remote_meta['version']) for e in manager.outdated()]
+            print("{} ({})".format(manager.ext_dir, len(result)))
+            l = ["{} {} -> {}".format(e.meta['uuid'], e.meta['version'], e.remote_meta['version']) for e in result]
+        if args.cmd == 'search':
+            print("Search results for '{}' ({})".format(args.term, len(result)))
+            l = ['{} - {}'.format(e.remote_meta['uuid'], e.remote_meta['name']) for e in result]
         else:
-            l = ["{}@{}".format(e.uuid, e.meta['version']) for e in list_cmd_map[args.cmd]()]
-        print("{} ({})".format(manager.ext_dir, len(l)))
+            print("{} ({})".format(manager.ext_dir, len(l)))
+            l = ["{}@{}".format(e.uuid, e.meta['version']) for e in result]
         print_nice_list(l)
     elif args.cmd == 'info':
         print_info(Extension(args.uuid))
