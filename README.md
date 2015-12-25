@@ -29,7 +29,7 @@ optional arguments:
 
 ## DONE:
 * list installed
-* list enabled
+* list enabled/disabled
 * list outdated
 * extension info
 
