@@ -136,9 +136,13 @@ def main():
             print("'{}' is not installed".format(args.uuid))
         else:
             print("Uninstalling '{}'".format(args.uuid))
+            ext = Extension(args.uuid)
+            was_enabled = ext.enabled()
             manager.uninstall(args.uuid)
             print("Installing {} to '{}'".format(args.uuid, EXTENSION_DIR))
             manager.install(args.uuid)
+            if was_enabled:
+                manager.enable(args.uuid)
     elif args.cmd == 'uninstall':
         if args.uuid not in manager.installed_uuids():
             print("'{}' is not installed".format(args.uuid))
@@ -154,7 +158,10 @@ def main():
             prompt = input('Would you like to install these updates? (yes) ')
             if prompt.lower().strip().startswith('y'):
                 for e in outdated:
+                    was_enabled = e.enabled()
                     print("Installing {}@{} to {}".format(e.uuid, e.remote_meta['version'], EXTENSION_DIR))
                     manager.uninstall(e.uuid)
                     manager.install(e.uuid)
+                    if was_enabled:
+                        manager.enable(e.uuid)
                 reload_gnome_shell()
