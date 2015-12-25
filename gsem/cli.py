@@ -1,8 +1,10 @@
 import argparse
 
 from gsem.config import API_ROOT
+from gsem.config import EXTENSION_DIR
 from gsem.extension import Extension
 from gsem.extension import ExtensionManager
+from gsem.utils import reload_gnome_shell
 
 
 def cli_args():
@@ -22,7 +24,11 @@ def cli_args():
     info.add_argument('-r', '--remote', help='fetch info from {}'.format(API_ROOT),
                       action='store_true', default=False)
     install = commands.add_parser('install', help='install extension')
-    install.add_argument('uuid', help='extension uuid', metavar='UUID')
+    install.add_argument('uuid', help='extension uuid')
+    install.add_argument('--disabled', help='do not enable the extension', default=False,
+                         action='store_true', dest='disabled')
+    install.add_argument('--no-reload', help='do not reload gnome-shell', default=False,
+                         action='store_true', dest='no_reload')
     reinstall = commands.add_parser('reinstall', help='reinstall extension')
     reinstall.add_argument('uuid', help='extension uuid', metavar='UUID')
     uninstall = commands.add_parser('uninstall', help='uninstall extension')
@@ -84,7 +90,7 @@ def main():
         'disabled': manager.disabled,
         'outdated': manager.outdated,
         'disabled': manager.disabled,
-        'search': lambda: manager.search(args.term)
+        'search': lambda: manager.search(args.term),
     }
     if args.cmd in list_cmd_map.keys():
         result = list_cmd_map[args.cmd]()
@@ -112,3 +118,29 @@ def main():
             print("'{}' disabled".format(args.uuid))
         else:
             print("Can't disable '{}".format(args.uuid))
+    elif args.cmd == 'install':
+        if args.uuid in manager.installed_uuids():
+            print("'{}' already installed".format(args.uuid))
+        else:
+            print("Installing {} to '{}'".format(args.uuid, EXTENSION_DIR))
+            manager.install(args.uuid)
+            if not args.disabled:
+                print("Enabling '{}'".format(args.uuid))
+                manager.enable(args.uuid)
+                if not args.no_reload:
+                    print("Reloading gnome-shell...")
+                    reload_gnome_shell()
+    elif args.cmd == 'reinstall':
+        if args.uuid not in manager.installed_uuids():
+            print("'{}' is not installed".format(args.uuid))
+        else:
+            print("Uninstalling '{}'".format(args.uuid))
+            manager.uninstall(args.uuid)
+            print("Installing {} to '{}'".format(args.uuid, EXTENSION_DIR))
+            manager.install(args.uuid)
+    elif args.cmd == 'uninstall':
+        if args.uuid not in manager.installed_uuids():
+            print("'{}' is not installed".format(args.uuid))
+        else:
+            print("Uninstalling '{}'".format(args.uuid))
+            manager.uninstall(args.uuid)

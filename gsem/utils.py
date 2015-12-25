@@ -3,6 +3,9 @@ import urllib.request
 import json
 import subprocess
 
+from io import BytesIO
+from zipfile import ZipFile
+
 
 def gnome_shell_version():
     """Get Gnome Shell version number.
@@ -34,3 +37,28 @@ def get_json_response(endpoint, query):
     with urllib.request.urlopen(full_url) as f:
         data = f.read().decode('utf-8')
     return json.loads(data)
+
+
+def download_and_extract_zip(url, dest):
+    """Download zipfile and extract to destination dir.
+
+    :url: url to download zipfile
+    :dest: destination directory
+
+    """
+    with urllib.request.urlopen(url) as f:
+        data = f.read()
+    zipfile = ZipFile(BytesIO(data))
+    zipfile.extractall(path=dest)
+
+
+def reload_gnome_shell():
+    """Reload gnome shell.
+
+    """
+    cmd = subprocess.Popen(
+        "dbus-send --type=method_call --dest=org.gnome.Shell /org/gnome/Shell "
+        "org.gnome.Shell.Eval string:'global.reexec_self()'",
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
+    )
+    cmd.communicate()

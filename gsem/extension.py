@@ -1,12 +1,15 @@
 import json
 import os
+import shutil
 from gi.repository import Gio
 from gi.repository import GLib
 
 from gsem.utils import get_json_response
+from gsem.utils import download_and_extract_zip
 from gsem.config import (
     EXTENSION_DIR,
     GNOME_SHELL_VERSION,
+    API_ROOT,
     API_DETAIL,
     API_SEARCH,
 )
@@ -64,20 +67,20 @@ class ExtensionManager:
     def __init__(self, ext_dir=EXTENSION_DIR):
         self.ext_dir = ext_dir
 
-    def __enabled_uuids(self):
+    def enabled_uuids(self):
         return set(
             Gio.Settings.new('org.gnome.shell')
             .get_value('enabled-extensions')
         ).intersection({ex.uuid for ex in self.installed()})
 
-    def __installed_uuids(self):
+    def installed_uuids(self):
         return os.listdir(self.ext_dir)
 
     def installed(self):
-        return [Extension(uuid) for uuid in self.__installed_uuids()]
+        return [Extension(uuid) for uuid in self.installed_uuids()]
 
     def enabled(self):
-        return [Extension(uuid) for uuid in self.__enabled_uuids()]
+        return [Extension(uuid) for uuid in self.enabled_uuids()]
 
     def disabled(self):
         installed_uuids = {e.uuid for e in self.installed()}
@@ -101,12 +104,12 @@ class ExtensionManager:
         return found
 
     def enable(self, uuid):
-        if uuid in self.__enabled_uuids():
+        if uuid in self.enabled_uuids():
             return True
         ext = Extension(uuid)
         if not ext.installed():
             return False
-        enabled_uuids = self.__enabled_uuids()
+        enabled_uuids = self.enabled_uuids()
         enabled_uuids.add(uuid)
         Gio.Settings('org.gnome.shell').set_value(
             'enabled-extensions',
@@ -115,9 +118,9 @@ class ExtensionManager:
         return True
 
     def disable(self, uuid):
-        if uuid not in self.__installed_uuids():
+        if uuid not in self.installed_uuids():
             raise Extension('Not installed')
-        enabled_uuids = self.__enabled_uuids()
+        enabled_uuids = self.enabled_uuids()
         if uuid not in enabled_uuids:
             return True
         enabled_uuids.remove(uuid)
@@ -126,3 +129,14 @@ class ExtensionManager:
             GLib.Variant('as', list(enabled_uuids))
         )
         return True
+
+    def install(self, uuid):
+        ext = Extension(uuid)
+        download_url = API_ROOT + ext.remote_meta['download_url']
+        dest_dir = os.path.join(EXTENSION_DIR, uuid)
+        download_and_extract_zip(download_url, dest_dir)
+        return ext
+
+    def uninstall(self, uuid):
+        self.disable(uuid)
+        shutil.rmtree(os.path.join(EXTENSION_DIR, uuid))
