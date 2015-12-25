@@ -79,6 +79,7 @@ def main():
         'enabled': manager.enabled,
         'disabled': manager.disabled,
         'outdated': manager.outdated,
+        'disabled': manager.disabled,
     }
     if args.cmd in list_cmd_map.keys():
         if args.cmd == 'outdated':
