@@ -3,15 +3,14 @@
 *gsem* - Command line extension manager for Gnome-Shell
 
 ```
-./bin/gsem -h
 usage: gsem [-h]
-            {ls,enabled,disabled,outdated,info,install,reinstall,uninstall,update,search}
+            {ls,enabled,disabled,outdated,info,install,reinstall,uninstall,update,search,enable,disable}
             ...
 
 Gnome-Shell extension manager
 
 positional arguments:
-  {ls,enabled,disabled,outdated,info,install,reinstall,uninstall,update,search}
+  {ls,enabled,disabled,outdated,info,install,reinstall,uninstall,update,search,enable,disable}
     ls                  list installed extensions
     enabled             list enabled extensions
     disabled            list disabled extensions
@@ -22,6 +21,8 @@ positional arguments:
     uninstall           uninstall extension
     update              update extensions
     search              search extensions
+    enable              enable extension
+    disable             disable extension
 
 optional arguments:
   -h, --help            show this help message and exit
