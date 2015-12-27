@@ -46,6 +46,7 @@ class Extension:
         self._remote_meta = value
 
     def outdated(self):
+        # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3
         return self.remote_meta['version'] > self.meta['version']
 
     def enabled(self):
@@ -88,6 +89,7 @@ class ExtensionManager:
         return [Extension(uuid) for uuid in installed_uuids.difference(enabled_uuids)]
 
     def outdated(self):
+        # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3
         return [e for e in self.enabled() if e.outdated()]
 
     def search(self, term):
