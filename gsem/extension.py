@@ -1,6 +1,8 @@
 import json
 import os
 import shutil
+import warnings
+
 from gi.repository import Gio
 from gi.repository import GLib
 
@@ -62,6 +64,15 @@ class Extension:
             installed = False
         return installed
 
+    def supported(self):
+        try:
+            for f in ['description', 'name', 'version']:
+                assert f in self.meta, 'Missing field  - "{}"'.format(f)
+            return True
+        except Exception as e:
+            warnings.warn("[{}] {}: metadata {}".format(self.uuid, e, self.meta))
+            return False
+
 
 class ExtensionManager:
 
@@ -78,7 +89,12 @@ class ExtensionManager:
         return os.listdir(self.ext_dir)
 
     def installed(self):
-        return [Extension(uuid) for uuid in self.installed_uuids()]
+        installed = []
+        for uuid in self.installed_uuids():
+            ext = Extension(uuid)
+            if ext.supported():
+                installed.append(ext)
+        return installed
 
     def enabled(self):
         return [Extension(uuid) for uuid in self.enabled_uuids()]

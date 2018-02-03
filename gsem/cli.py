@@ -86,11 +86,10 @@ def main():
         parser.exit(1)
     manager = ExtensionManager()
     list_cmd_map = {
-        'ls': manager.installed,
+        'disabled': manager.disabled,
         'enabled': manager.enabled,
-        'disabled': manager.disabled,
+        'ls': manager.installed,
         'outdated': manager.outdated,
-        'disabled': manager.disabled,
         'search': lambda: manager.search(args.term),
     }
     if args.cmd in list_cmd_map.keys():
