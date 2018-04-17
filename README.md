@@ -40,6 +40,10 @@ Make sure you have `"$HOME/.local/bin"` in your `$PATH`.
 ### Global installation
 Run `sudo pip install gsem`
 
+### Updating the package
+
+Run `pip install -U --user gsem` for user installation or `sudo pip install -U gsem` for global installation.
+
 ## DONE:
 * list installed
 * list enabled/disabled
