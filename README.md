@@ -1,5 +1,7 @@
 # gsem
 
+[![PyPI version](https://badge.fury.io/py/gsem.svg)](https://pypi.org/project/gsem/)
+
 *gsem* - Command line extension manager for Gnome-Shell
 
 ```
@@ -27,6 +29,20 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
 ```
+
+## Installation
+
+### User installation (recommended)
+Run `pip install --user gsem`
+
+Make sure you have `"$HOME/.local/bin"` in your `$PATH`.
+
+### Global installation
+Run `sudo pip install gsem`
+
+### Updating the package
+
+Run `pip install -U --user gsem` for user installation or `sudo pip install -U gsem` for global installation.
 
 ## DONE:
 * list installed
