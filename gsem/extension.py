@@ -108,9 +108,9 @@ class ExtensionManager:
         # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3
         return [e for e in self.enabled() if e.outdated()]
 
-    def search(self, term):
+    def search(self, term, shell_version='all'):
         query = {
-            'shell_version': '.'.join(str(v) for v in GNOME_SHELL_VERSION),
+            'shell_version': shell_version,
             'search': term,
         }
         response = get_json_response(API_SEARCH, query)

@@ -2,6 +2,7 @@ import argparse
 
 from gsem.config import API_ROOT
 from gsem.config import EXTENSION_DIR
+from gsem.config import GNOME_SHELL_VERSION
 from gsem.extension import Extension
 from gsem.extension import ExtensionManager
 from gsem.utils import reload_gnome_shell
@@ -13,7 +14,10 @@ def cli_args():
     :returns: argparse.Namespace with parsed args
 
     """
-    parser = argparse.ArgumentParser(description='Gnome-Shell extension manager')
+    parser = argparse.ArgumentParser(
+        description='Gnome-Shell extension manager',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     commands = parser.add_subparsers(dest='cmd')
     commands.add_parser('ls', help='list installed extensions')
     commands.add_parser('enabled', help='list enabled extensions')
@@ -36,10 +40,15 @@ def cli_args():
     commands.add_parser('update', help='update extensions')
     search = commands.add_parser('search', help='search extensions')
     search.add_argument('term', help='search term', metavar='TERM')
+    search.add_argument('--shell-version', dest='shell_version',
+                        default='.'.join([str(v) for v in GNOME_SHELL_VERSION]),
+                        help='Gnome Shell version', type=str)
     enable = commands.add_parser('enable', help='enable extension')
     enable.add_argument('uuid', help='extension uuid', metavar='UUID')
     disable = commands.add_parser('disable', help='disable extension')
     disable.add_argument('uuid', help='extensions uuid', metavar='UUID')
+    for command in commands.choices.values():
+        command.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     return parser
 
 
@@ -90,14 +99,14 @@ def main():
         'enabled': manager.enabled,
         'ls': manager.installed,
         'outdated': manager.outdated,
-        'search': lambda: manager.search(args.term),
+        'search': lambda: manager.search(args.term, args.shell_version),
     }
     if args.cmd in list_cmd_map.keys():
         result = list_cmd_map[args.cmd]()
         if args.cmd == 'outdated':
             print("{} ({})".format(manager.ext_dir, len(result)))
             l = ["{} {} -> {}".format(e.meta['uuid'], e.meta['version'], e.remote_meta['version']) for e in result]
-        if args.cmd == 'search':
+        elif args.cmd == 'search':
             print("Search results for '{}' ({})".format(args.term, len(result)))
             l = ['{} - {}'.format(e.remote_meta['uuid'], e.remote_meta['name']) for e in result]
         else:
