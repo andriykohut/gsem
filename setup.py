@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='gsem',
-      version='0.1.2',
+      version='0.1.3',
       description='Command line extension manager for Gnome-Shell',
       url='https://github.com/andriykohut/gsem',
       author='Andriy Kogut',
