@@ -3,6 +3,8 @@ import os
 import shutil
 import warnings
 
+from distutils.version import LooseVersion
+
 from gi.repository import Gio
 from gi.repository import GLib
 
@@ -49,7 +51,7 @@ class Extension:
 
     def outdated(self):
         # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3
-        return self.remote_meta['version'] > self.meta['version']
+        return LooseVersion(str(self.remote_meta['version'])) > LooseVersion(str(self.meta['version']))
 
     def enabled(self):
         return self.uuid in (Gio.Settings
