@@ -54,5 +54,26 @@ Run `pip install -U --user gsem` for user installation or `sudo pip install -U g
 * install/uninstall/reinstall
 * update
 
+## Contributing
+
+Development on latest python version is preferred, as of now it's 3.9.
+To start you'll need the following setup:
+
+Example uses pyenv to install latest python and manage virtualenv. Run the following commands from the root of the repository.
+
+```sh
+pyenv install 3.9.2           # install latest python version
+pyenv virtualenv 3.9.2 gsem   # create gsem virtual environment
+pyenv activate gsem           # activate the venv
+pyenv local gsem              # set local python version for the repo
+poetry install                # install all dependencies inside the virtual environment
+pre-commit install            # install pre-commit hooks
+```
+
+Run all the linters:
+```sh
+pre-commit run -a
+```
+
 ## TODO:
 * pin
