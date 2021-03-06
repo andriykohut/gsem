@@ -1,0 +1,15 @@
+name: Lint
+
+on:
+  pull_request:
+    paths:
+      - "*.py"
+
+jobs:
+  black-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Python Black Check
+        uses: RojerGS/python-black-check@v1.2
+        with:
+          line-length: '88'
