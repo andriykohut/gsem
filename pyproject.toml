@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gsem"
-version = "0.2.1"
+version = "0.2.2"
 description = "Command line extension manager for Gnome-Shell"
 authors = ["Andrii Kohut <kogut.andriy@gmail.com>"]
 license = "MIT"
