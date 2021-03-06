@@ -63,7 +63,7 @@ class Extension:
 
     @property
     def is_outdated(self) -> bool:
-        # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3
+        # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3  # noqa
         return self.remote_version > self.version
 
     @property
@@ -124,7 +124,7 @@ class ExtensionManager:
         ]
 
     def outdated(self) -> List[Extension]:
-        # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3
+        # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3  # noqa
         return [e for e in self.installed() if e.is_outdated]
 
     def search(self, term: str, shell_version: str = "all") -> List[Extension]:
