@@ -1,5 +1,6 @@
 import argparse
 from typing import Callable, Dict, List
+from urllib.error import HTTPError
 
 from gsem.config import API_ROOT, EXTENSION_DIR, GNOME_SHELL_VERSION
 from gsem.extension import Extension, ExtensionManager
@@ -123,7 +124,13 @@ def main() -> None:
             print(f"{manager.ext_dir} ({len(lines)})")
         print_nice_list(lines)
     elif args.cmd == "info":
-        print_info(Extension(args.uuid))
+        try:
+            print_info(Extension(args.uuid))
+        except HTTPError as err:
+            if err.code == 404:
+                print("Extension not found")
+                return
+            raise
     elif args.cmd == "enable":
         enabled = manager.enable(args.uuid)
         if enabled:
