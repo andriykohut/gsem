@@ -88,7 +88,7 @@ class Extension:
             return True
         except Exception as e:
             warnings.warn(
-                f"[{self.uuid}] {e}: metadata {self.meta} - extenstion is not supported"
+                f"[{self.uuid}] {e}: metadata {self.meta} - extension is not supported"
             )
             return False
 
