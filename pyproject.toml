@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "gsem"
+version = "0.2.0"
+description = "Command line extension manager for Gnome-Shell"
+authors = ["Andrii Kohut <kogut.andriy@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/andriykohut/gsem"
+repository = "https://github.com/andriykohut/gsem"
+
+keywords = ["gnome-shell", "gnome", "cli", "command-line-tool", "gnome-shell-extension"]
+classifiers = ["Topic :: Desktop Environment :: Gnome"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+PyGObject = "^3.38.0"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+flake8 = "^3.8.4"
+mypy = "^0.812"
+
+[tool.poetry.scripts]
+gsem = "gsem.cli:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
