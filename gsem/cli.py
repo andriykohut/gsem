@@ -36,11 +36,11 @@ def cli_args() -> argparse.ArgumentParser:
         dest="disabled",
     )
     install.add_argument(
-        "--no-reload",
-        help="do not reload gnome-shell",
+        "--reload",
+        help="Reload gnome-shell after installation",
         default=False,
         action="store_true",
-        dest="no_reload",
+        dest="reload",
     )
     reinstall = commands.add_parser("reinstall", help="reinstall extension")
     reinstall.add_argument("uuid", help="extension uuid", metavar="UUID")
@@ -145,7 +145,7 @@ def main() -> None:
             if not args.disabled:
                 print(f"Enabling '{args.uuid}'")
                 manager.enable(args.uuid)
-                if not args.no_reload:
+                if args.reload:
                     print("Reloading gnome-shell...")
                     reload_gnome_shell()
     elif args.cmd == "reinstall":
