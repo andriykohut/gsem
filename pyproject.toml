@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gsem"
-version = "0.2.0"
+version = "0.2.1"
 description = "Command line extension manager for Gnome-Shell"
 authors = ["Andrii Kohut <kogut.andriy@gmail.com>"]
 license = "MIT"
@@ -12,7 +12,7 @@ keywords = ["gnome-shell", "gnome", "cli", "command-line-tool", "gnome-shell-ext
 classifiers = ["Topic :: Desktop Environment :: Gnome"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.7"
 PyGObject = "^3.38.0"
 
 [tool.poetry.dev-dependencies]
