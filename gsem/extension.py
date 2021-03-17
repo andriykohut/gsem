@@ -127,7 +127,8 @@ class ExtensionManager:
         # TODO: use https://extensions.gnome.org/update-info/?installed={%22arch-update@RaphaelRochet%22:{%22version%22:6}}&shell_version=3.18.3  # noqa
         return [e for e in self.installed() if e.is_outdated]
 
-    def search(self, term: str, shell_version: str = "all") -> List[Extension]:
+    @staticmethod
+    def search(term: str, shell_version: str = "all") -> List[Extension]:
         query = {
             "shell_version": shell_version,
             "search": term,
@@ -167,7 +168,8 @@ class ExtensionManager:
         )
         return True
 
-    def install(self, uuid: str) -> Extension:
+    @staticmethod
+    def install(uuid: str) -> Extension:
         ext = Extension(uuid)
         download_url = API_ROOT + ext.remote_meta["download_url"]
         dest_dir = os.path.join(EXTENSION_DIR, uuid)
