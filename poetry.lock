@@ -204,15 +204,15 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
-name = "pygobject"
-version = "3.38.0"
+name = "PyGObject"
+version = "3.42.2"
 description = "Python bindings for GObject Introspection"
 category = "main"
 optional = false
-python-versions = ">=3.5, <4"
+python-versions = ">=3.6, <4"
 
 [package.dependencies]
-pycairo = ">=1.11.1"
+pycairo = ">=1.16,<2.0"
 
 [[package]]
 name = "pyyaml"
@@ -401,8 +401,8 @@ pyflakes = [
     {file = "pyflakes-2.3.0-py2.py3-none-any.whl", hash = "sha256:910208209dcea632721cb58363d0f72913d9e8cf64dc6f8ae2e02a3609aba40d"},
     {file = "pyflakes-2.3.0.tar.gz", hash = "sha256:e59fd8e750e588358f1b8885e5a4751203a0516e0ee6d34811089ac294c8806f"},
 ]
-pygobject = [
-    {file = "PyGObject-3.38.0.tar.gz", hash = "sha256:051b950f509f2e9f125add96c1493bde987c527f7a0c15a1f7b69d6d1c3cd8e6"},
+PyGObject = [
+    {file = "PyGObject-3.42.2.tar.gz", hash = "sha256:21524cef33100c8fd59dc135948b703d79d303e368ce71fa60521cc971cd8aa7"},
 ]
 pyyaml = [
     {file = "PyYAML-5.4.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:3b2b1824fe7112845700f815ff6a489360226a5609b96ec2190a45e62a9fc922"},
