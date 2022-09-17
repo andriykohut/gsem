@@ -20,7 +20,7 @@ black = "^20.8b1"
 flake8 = "^5.0.4"
 mypy = "^0.971"
 pre-commit = "^2.20.0"
-isort = "^5.7.0"
+isort = "^5.10.1"
 
 [tool.poetry.scripts]
 gsem = "gsem.cli:main"
