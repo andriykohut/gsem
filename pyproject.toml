@@ -18,7 +18,7 @@ PyGObject = "^3.38.0"
 [tool.poetry.dev-dependencies]
 black = "^22.10"
 flake8 = "^5.0.4"
-mypy = "^0.990"
+mypy = "^0.991"
 pre-commit = "^2.20.0"
 isort = "^5.10.1"
 
