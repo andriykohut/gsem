@@ -44,7 +44,7 @@ Run `sudo pip install gsem`
 
 Run `pip install -U --user gsem` for user installation or `sudo pip install -U gsem` for global installation.
 
-## DONE:
+## Features:
 * list installed
 * list enabled/disabled
 * list outdated
