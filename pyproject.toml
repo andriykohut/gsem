@@ -19,7 +19,7 @@ PyGObject = "^3.38.0"
 black = "^22.12"
 flake8 = "^5.0.4"
 mypy = "^0.991"
-pre-commit = "^2.20.0"
+pre-commit = "^2.21.0"
 isort = "^5.11.3"
 
 [tool.poetry.scripts]
