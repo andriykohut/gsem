@@ -175,7 +175,7 @@ def main() -> None:
             manager.uninstall(args.uuid)
     elif args.cmd == "update":
         outdated = manager.outdated()
-        print(f"Extension updates avaliable ({len(outdated)})")
+        print(f"Extension updates available ({len(outdated)})")
         if outdated:
             lines = [f"{e.uuid} {e.version} -> {e.remote_version}" for e in outdated]
             print_nice_list(lines)
